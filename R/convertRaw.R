@@ -3,7 +3,7 @@
 #' Converts DB1B files from BTS/RITA/Transtats website raw data (prezipped file), for SKYNET's import function.
 #'
 #' Reduces DB1B raw filesize, to an adequate SKYNET compatible format. This function will create a csv file for you.
-#' File order doesn't matter, but it is recomended to name the files using the following
+#' File order doesn't matter, but it is recommended to name the files using the following
 #' syntax: \emph{"Origin_and_Destination_Survey_DB1BCoupon_year_quarter.csv", "Origin_and_Destination_Survey_DB1BTicket_year_quarter.csv".}
 #' Note: We do recommend sparklyr to be used for larger sets of data.
 #'
@@ -44,11 +44,9 @@ convertRaw <- function(x,y,path = NULL){
                        integer64 = "numeric")
 
   Ticket_temp <- Ticket_temp %>%
-    select("ItinID", "RoundTrip", "FarePerMile", "Passengers", "ItinFare", "BulkFare", "Distance",
-           "Year", "Quarter") %>%
+    select("ItinID", "RoundTrip", "FarePerMile", "Passengers", "ItinFare", "BulkFare", "Distance") %>%
     rename(ITIN_ID = ItinID, ROUNDTRIP = RoundTrip, ITIN_YIELD = FarePerMile, PASSENGERS = Passengers,
-           ITIN_FARE = ItinFare, BULKFARE = BulkFare, DISTANCE_FULL = Distance,
-           YEAR = Year, QUARTER = Quarter)
+           ITIN_FARE = ItinFare, BULKFARE = BulkFare, DISTANCE_FULL = Distance)
 
   Coupon_temp <- fread(c, header = TRUE, sep = ",", stringsAsFactors = FALSE,
                        integer64 = "numeric")

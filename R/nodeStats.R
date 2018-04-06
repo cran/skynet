@@ -41,12 +41,15 @@ if(!is.null(x[["trip_break"]])){
       mutate_all(funs(ifelse(is.na(.), 0, .)))
 
 }else{
-  nodeStat <- merge(departures, arrivals, by = "airport", all = TRUE)
+  nodeStat <- departures %>%
+    merge(arrivals, by = "airport", all = TRUE) %>%
+    mutate_all(funs(ifelse(is.na(.), 0, .))) %>%
+    mutate(pass_tr = 0)
 }
 
 nodeStat <- nodeStat %>%
   merge(airportCodeFull, by.x = "airport", by.y = "origin", all.x = TRUE) %>%
-  mutate(freq = pass_dep + pass_arr)
+  mutate(freq = (pass_arr + (pass_dep-pass_tr)))
 
 return(nodeStat)
 

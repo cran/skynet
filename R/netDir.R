@@ -9,17 +9,17 @@
 #' @param cap Filters original data based on the edge weight.
 #' @param pct Argument for cap filter. Value should be imput as percentage.
 #' @param carrier Groups data per carrier and OD
-#' @param metro Groups data by metropolitan area (not compatible with plot)
+#' @param metro Groups data by metropolitan area
 #'
 #' @examples
 #' \dontrun{
-#' make.netDir(OD_sample)
+#' make.netDir(OD_Sample)
 #'
 #' # Apply Disparity Filter
-#' make.netDir(OD_sample, disp = TRUE, alpha = 0.05)
+#' make.netDir(OD_Sample, disp = TRUE, alpha = 0.05)
 #'
 #' # Apply Percentage Cap
-#' make.netDir(OD_sample, cap = TRUE, pct = 20)
+#' make.netDir(OD_Sample, cap = TRUE, pct = 20)
 #' }
 #' @export
 #'
@@ -44,18 +44,22 @@ make.netDir <- function(x, disp = FALSE, cap = FALSE, alpha = 0.003, pct = 10, c
   if(carrier == TRUE){
 
     netDir_all <- x %>%
-      select(origin, dest, passengers, op_carrier, itin_yield, roundtrip, distance) %>%
+      select(origin, dest, passengers, op_carrier, itin_yield, distance) %>%
       group_by(origin, dest, op_carrier) %>%
       mutate(itin_fare = itin_yield*distance) %>%
-      summarise(weight = sum(passengers), fare_sd = round(sd(itin_fare), 2), itin_fare = round(mean(itin_fare), 2), itin_yield = mean(itin_yield)) %>%
+      summarise(weight = sum(passengers), fare_sd = round(sd(itin_fare), 2),
+                itin_fare = round(mean(itin_fare), 2), itin_yield = mean(itin_yield),
+                distance = mean(distance)) %>%
       mutate(fare_sd = ifelse(is.na(fare_sd), 0, fare_sd))
   }
   else{
     netDir_all <- x %>%
-      select(origin, dest, passengers, op_carrier, itin_yield, roundtrip, distance) %>%
+      select(origin, dest, passengers, itin_yield, distance) %>%
       group_by(origin, dest) %>%
       mutate(itin_fare = itin_yield*distance) %>%
-      summarise(weight = sum(passengers), fare_sd = round(sd(itin_fare), 2), itin_fare = round(mean(itin_fare), 2), itin_yield = mean(itin_yield)) %>%
+      summarise(weight = sum(passengers), fare_sd = round(sd(itin_fare), 2),
+                itin_fare = round(mean(itin_fare), 2), itin_yield = mean(itin_yield),
+                distance = mean(distance)) %>%
       mutate(fare_sd = ifelse(is.na(fare_sd), 0, fare_sd))
   }
 
