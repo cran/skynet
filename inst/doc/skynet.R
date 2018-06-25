@@ -1,6 +1,7 @@
 ## ---- eval=FALSE---------------------------------------------------------
 #   library(skynet)
-#   netImport("/folder1/Coupon 2016Q1.csv", "/folder/Ticket 2016Q1.csv")
+#   import_db1b("folder/Coupon 2016Q1.csv", "folder/Ticket 2016Q1.csv")
+#   import_t100("folder/T100_2016.csv")
 
 ## ---- echo=FALSE, message=FALSE, warning=FALSE, results='asis'-----------
 knitr::kable(data.frame(Coupon = c("Itinerary ID", "Market ID", "Sequence Number", "Origin City Market ID",  
@@ -21,6 +22,11 @@ knitr::kable(head(OD_Sample, 5)) %>% kable_styling()
 ## ---- echo=FALSE, message=FALSE, warning=FALSE,dpi = 300, fig.width = 6, fig.height= 4, out.width=500----
 library(skynet)
 data("OD_Sample")
-test <- make.netDir(OD_Sample)
-netMap(test$netDir, pct = 10)
+test <- make_net_dir(OD_Sample)
+net_map(test, pct = 10)
+
+## ------------------------------------------------------------------------
+library(skynet)
+test <- make_net_dir(OD_Sample)
+boot_network(test$gDir, n = 10)
 

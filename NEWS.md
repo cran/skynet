@@ -48,3 +48,34 @@
 * Metro Network can be plotted.
 * Improved way of calculating airport passenger frequency.
 * Minor bug fixes.
+
+# skynet 1.0.2
+
+* New import functions. Now there are separate functions to import csv files from both DB1B and T100 databases.
+* New bootnet function to bootstrap networks.
+
+# skynet 1.0.3
+
+* Minor adjustments
+* Improved readability
+
+# skynet 1.0.4
+
+* Improved ReadMe file
+* Fixed website
+* Added extra comments and help information
+
+# skynet 1.1.0
+
+* Changed way files are imported. Now Coupon should take the first argument and Ticket the second.
+* Minor adjustmenst to the help files.
+
+# skynet 1.2.0
+
+* Major function naming changes to match syntax etiquette
+* Skynet S3 class added
+
+# skynet 1.2.1
+
+* Year and quarter added to skynet object
+* Fixed site

@@ -1,6 +1,9 @@
 #' Directed network
 #'
-#' Generates Directed Network with an iGraph object and a Data Frame.
+#' Generates Directed Network with an iGraph \strong{gDir} object,
+#' a Data Frame \strong{netDir} and a Data Frame
+#' with Airport/Nodes statistics \strong{nodes}.
+#'
 #'
 #' @param x Data frame
 #' @param disp Uses the Serrano's disparity filter (\url{https://en.wikipedia.org/wiki/Disparity_filter_algorithm_of_weighted_network})
@@ -13,23 +16,27 @@
 #'
 #' @examples
 #' \dontrun{
-#' make.netDir(OD_Sample)
+#' make_net_dir(OD_Sample)
 #'
 #' # Apply Disparity Filter
-#' make.netDir(OD_Sample, disp = TRUE, alpha = 0.05)
+#' make_net_dir(OD_Sample, disp = TRUE, alpha = 0.05)
 #'
 #' # Apply Percentage Cap
-#' make.netDir(OD_Sample, cap = TRUE, pct = 20)
+#' make_net_dir(OD_Sample, cap = TRUE, pct = 20)
 #' }
 #' @export
 #'
 
-make.netDir <- function(x, disp = FALSE, cap = FALSE, alpha = 0.003, pct = 10, carrier = FALSE, metro = FALSE){
+make_net_dir <- function(x, disp = FALSE, alpha = 0.003,
+                        cap = FALSE, pct = 10,
+                        carrier = FALSE, metro = FALSE){
 
   if(carrier == TRUE & disp == TRUE){
 
       stop("SKYNET doesn't support yet parallel edges on its disparity filter.
-           Not including the carrier option on the disparity filter mode, or running the carriers option without the disparity filter mode, solves the issue for now.")
+           Not including the carrier option on the disparity filter mode,
+           or running the carriers option without the disparity filter mode,
+           solves the issue for now.")
   }
 
   if(metro == TRUE){# Metro option
@@ -44,34 +51,37 @@ make.netDir <- function(x, disp = FALSE, cap = FALSE, alpha = 0.003, pct = 10, c
   if(carrier == TRUE){
 
     netDir_all <- x %>%
-      select(origin, dest, passengers, op_carrier, itin_yield, distance) %>%
-      group_by(origin, dest, op_carrier) %>%
+      select(origin, dest, passengers, op_carrier, itin_yield, distance, year, quarter) %>%
+      group_by(origin, dest, op_carrier, year, quarter) %>%
       mutate(itin_fare = itin_yield*distance) %>%
       summarise(weight = sum(passengers), fare_sd = round(sd(itin_fare), 2),
-                itin_fare = round(mean(itin_fare), 2), itin_yield = mean(itin_yield),
-                distance = mean(distance)) %>%
-      mutate(fare_sd = ifelse(is.na(fare_sd), 0, fare_sd))
-  }
-  else{
+                itin_fare = round(mean(itin_fare), 2),
+                itin_yield = mean(itin_yield), distance = mean(distance)) %>%
+      mutate(fare_sd = ifelse(is.na(fare_sd), 0, fare_sd)) %>%
+      select(-year, -quarter, everything())
+
+    }else{
     netDir_all <- x %>%
-      select(origin, dest, passengers, itin_yield, distance) %>%
-      group_by(origin, dest) %>%
+      select(origin, dest, passengers, itin_yield, distance, year, quarter) %>%
+      group_by(origin, dest, year, quarter) %>%
       mutate(itin_fare = itin_yield*distance) %>%
       summarise(weight = sum(passengers), fare_sd = round(sd(itin_fare), 2),
-                itin_fare = round(mean(itin_fare), 2), itin_yield = mean(itin_yield),
-                distance = mean(distance)) %>%
-      mutate(fare_sd = ifelse(is.na(fare_sd), 0, fare_sd))
+                itin_fare = round(mean(itin_fare), 2),
+                itin_yield = mean(itin_yield), distance = mean(distance)) %>%
+      mutate(fare_sd = ifelse(is.na(fare_sd), 0, fare_sd)) %>%
+      select(-year, -quarter, everything())
   }
 
 
   #-------------------------------------------------
 
     if(metro == FALSE){
-      nodes <- nodeStats(x)
+      nodes <- node_stats(x)
     }else{  # Metro option
       nodes <- nodeStatsMetro(x)
 }
-  gDir <- igraph::graph_from_data_frame(netDir_all, directed = TRUE, vertices = nodes)
+  gDir <- igraph::graph_from_data_frame(netDir_all,
+                                        directed = TRUE, vertices = nodes)
 
   #-------------------------------------------------
 
@@ -79,7 +89,7 @@ make.netDir <- function(x, disp = FALSE, cap = FALSE, alpha = 0.003, pct = 10, c
     # Run disparity filter
 
     # Create igraph
-    gDir_disp <- dispfilter(gDir, alpha = alpha)
+    gDir_disp <- disparity_filter(gDir, alpha = alpha)
     netDir_disp <- get.data.frame(gDir_disp)
 
     netDir_disp <- netDir_disp %>%
@@ -115,19 +125,26 @@ make.netDir <- function(x, disp = FALSE, cap = FALSE, alpha = 0.003, pct = 10, c
     }
 
      nodes <- as.data.frame(get.vertex.attribute(gDir_disp))
+     nodes <- rename(nodes, airport = name)
 
-    return(list(gDir_disp = gDir_disp,netDir_disp = netDir_disp,
-                nodes = nodes))
+     netlist <- list(gDir_disp = gDir_disp,netDir_disp = netDir_disp,
+                     nodes = nodes)
+     class(netlist) <- "skynet"
+     return(netlist)
 
-    # ----------------------------------------------------------------------------- #
-                          # End of disp filter command #
-    # ----------------------------------------------------------------------------- #
+    # ------------------------------------------------------------- #
+                     # End of disp filter command #
+    # ------------------------------------------------------------- #
 
   }else if(cap == TRUE){
 
     # Applies 10% cap
-    gDir_cap <- graph_from_data_frame(netDir_all, directed = TRUE, vertices = nodes)
-    gDir_cap <- subgraph.edges(gDir_cap, which(E(gDir_cap)$weight > quantile(E(gDir_cap)$weight, prob = 1-pct/100)), delete.vertices = TRUE)
+    gDir_cap <- graph_from_data_frame(netDir_all,
+                                      directed = TRUE, vertices = nodes)
+
+    gDir_cap <- subgraph.edges(gDir_cap,
+                     which(E(gDir_cap)$weight > quantile(E(gDir_cap)$weight,
+                     prob = 1-pct/100)), delete.vertices = TRUE)
 
     #Creates Dataframe from graph
     netDir_cap <- igraph::as_data_frame(gDir_cap)
@@ -163,12 +180,16 @@ make.netDir <- function(x, disp = FALSE, cap = FALSE, alpha = 0.003, pct = 10, c
     }
 
      nodes <- as.data.frame(get.vertex.attribute(gDir_cap))
+     nodes <- rename(nodes, airport = name)
 
-    return(list(gDir_cap = gDir_cap, netDir_cap = netDir_cap, nodes = nodes))
+    netlist <- list(gDir_cap = gDir_cap,
+                    netDir_cap = netDir_cap, nodes = nodes)
+    class(netlist) <- "skynet"
+    return(netlist)
 
-    # ----------------------------------------------------------------------------- #
+    # --------------------------------------------------------------------- #
                            # End of 10% filter command #
-    # ----------------------------------------------------------------------------- #
+    # --------------------------------------------------------------------- #
 
 
   }else{
@@ -182,7 +203,8 @@ make.netDir <- function(x, disp = FALSE, cap = FALSE, alpha = 0.003, pct = 10, c
       # Add city name
       netDir_all <- netDir_all %>%
         left_join(airportCode, by = "origin") %>%
-        rename(origin_city = city, origin_city_mkt_id = city_mkt_id, passengers = weight)
+        rename(origin_city = city,
+               origin_city_mkt_id = city_mkt_id, passengers = weight)
 
       airtemp <- airportCode %>%
         rename(dest = origin, dest_city = city, dest_city_mkt_id = city_mkt_id)
@@ -205,18 +227,27 @@ make.netDir <- function(x, disp = FALSE, cap = FALSE, alpha = 0.003, pct = 10, c
 
     }
 
-    return(list(gDir = gDir, netDir = netDir_all, nodes = nodes))
+    netlist <- list(gDir = gDir, netDir = netDir_all, nodes = nodes)
+    class(netlist) <- "skynet"
+
+    return(netlist)
 
 
   }
 
 }
 
+make.netDir <- function(...){
+  warning(paste("make.netDir is deprecated, use make_net_dir(), instead."))
+  do.call(make_net_dir, list(...))
+}
 
-globalVariables(c("op_carrier", "itin_fare", "itin_yield", "roundtrip", "sd",
-                  "fare_sd", "city_mkt_id", "latitude.x", "latitude.x", "longitude.x",
-                  "longitude.y", "quantile", "distance", "MetroLookup", "origin_mkt_id",
-                  "dest_mkt_id"))
+
+globalVariables(c("op_carrier", "itin_fare", "itin_yield", "roundtrip",
+                  "sd", "fare_sd", "city_mkt_id", "latitude.x",
+                  "latitude.x", "longitude.x", "longitude.y",
+                  "quantile", "distance", "MetroLookup", "origin_mkt_id",
+                  "dest_mkt_id", "name", "year", "quarter"))
 
 # ----------------------------------------------------------------------------- #
 # ----------------------------------------------------------------------------- #

@@ -7,15 +7,12 @@
 #' @examples
 #' \dontrun{
 #' netDir <- make.netDir(OD_Sample)
-#' fitPlaw(netDir$gDir)
+#' fit_power(netDir$gDir)
 #' }
 #' @export
 #'
-#'
-#' @export
-#'
 
-fitPlaw <- function(graph) {
+fit_power <- function(graph) {
   # calculate degree
   d <- degree(graph, mode = "all")
   dd <- degree.distribution(graph, mode = "all", cumulative = FALSE)
@@ -26,14 +23,22 @@ fitPlaw <- function(graph) {
   probability <- probability[nonzero.position]
   degree <- degree[nonzero.position]
   reg <- lm(log(probability) ~ log(degree))
-  cozf <- coef(reg)
-  power.law.fit <- function(x) exp(cozf[[1]] + cozf[[2]] * log(x))
-  alpha <- -cozf[[2]]
-  R.square <- summary(reg)$r.squared
-  print(paste("Alpha =", round(alpha, 3)))
-  print(paste("R square =", round(R.square, 3)))
-  # plot
-  plot(probability ~ degree, log = "xy", xlab = "Degree (log)", ylab = "Probability (log)",
-       col = 1, main = "Degree Distribution")
-  curve(power.law.fit, col = "red", add = T, n = length(d))
+  cf <- coef(reg)
+  plotnet <- data.frame(probability = probability, degree = degree)
+  message(paste("Alpha =",
+                round(-cf[[2]], 3)))
+  message(paste("R square =",
+                round(summary(reg)$r.squared, 3)))
+  ggplot(plotnet, aes(y=log(probability), x=log(degree))) +
+    geom_point(col = "#56B4E9")+
+    geom_smooth(method="lm", se=FALSE, col = "#E69F00")
+
 }
+
+fitPlaw <- function(...){
+  warning(paste("fitPlaw is deprecated, use fit_power(), instead."))
+  do.call(fit_power, list(...))
+}
+
+
+globalVariables(c("cf", "geom_smooth"))

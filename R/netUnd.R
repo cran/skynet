@@ -1,6 +1,8 @@
 #' Undirected Network
 #'
-#' Generates Undirected Network with an iGraph object and a Data Frame.
+#' Generates Undirected Network with an iGraph \strong{gUnd} object,
+#' a Data Frame \strong{netUnd} and a Data Frame
+#' with Airport/Nodes statistics \strong{nodes}.
 #'
 #' @param x Data frame
 #' @param disp Uses the Serrano's disparity filter (\url{https://en.wikipedia.org/wiki/Disparity_filter_algorithm_of_weighted_network})
@@ -15,23 +17,28 @@
 #'
 #' @examples
 #' \dontrun{
-#' make.netUnd(OD_Sample)
+#' make_net_und(OD_Sample)
 #'
 #' # Apply Disparity Filter
-#' make.netUnd(OD_Sample, disp = TRUE, alpha = 0.05)
+#' make_net_und(OD_Sample, disp = TRUE, alpha = 0.05)
 #'
 #' # Apply Percentage Cap
-#' make.netUnd(OD_Sample, cap = TRUE, pct = 20)
+#' make_net_und(OD_Sample, cap = TRUE, pct = 20)
 #' }
 #'
 #' @export
+#'
 
-make.netUnd <- function(x, disp = FALSE, cap = FALSE, merge = TRUE, alpha = 0.003, pct = 10, carrier = FALSE, metro = FALSE){
+make_net_und <- function(x, disp = FALSE, alpha = 0.003,
+                        cap = FALSE, pct = 10,
+                        merge = TRUE, carrier = FALSE, metro = FALSE){
 
   if(carrier == TRUE & disp == TRUE){
 
     stop("SKYNET doesn't support yet parallel edges on its disparity filter.
-         Not including the carrier option on the disparity filter mode, or running the carriers option without the disparity filter mode, solves the issue for now.")
+         Not including the carrier option on the disparity filter mode,
+         or running the carriers option without the disparity filter mode,
+         solves the issue for now.")
   }
 
   if(metro == TRUE){# Metro option
@@ -45,38 +52,44 @@ make.netUnd <- function(x, disp = FALSE, cap = FALSE, merge = TRUE, alpha = 0.00
   if(carrier == TRUE & merge == FALSE){
 
     netUnd_all <- x %>%
-      select(origin, dest, passengers, op_carrier, itin_yield, distance) %>%
-      group_by(origin, dest, op_carrier) %>%
+      select(origin, dest, passengers, op_carrier, year, quarter,
+             itin_yield, distance) %>%
+      group_by(origin, dest, op_carrier, year, quarter) %>%
       mutate(itin_fare = itin_yield*distance) %>%
       summarise(weight = sum(passengers), fare_sd = round(sd(itin_fare), 2),
                 itin_fare = round(mean(itin_fare), 2),
                 itin_yield = mean(itin_yield), distance = mean(distance)) %>%
-      mutate(fare_sd = ifelse(is.na(fare_sd), 0, fare_sd))
+      mutate(fare_sd = ifelse(is.na(fare_sd), 0, fare_sd)) %>%
+      select(-year, -quarter, everything())
+
   }
 
     if(carrier == TRUE & merge == TRUE){
-      nodes <- nodeStats(x)
+      nodes <- node_stats(x)
       netUnd_all <- x %>%
-        select(origin, dest, passengers, op_carrier, itin_yield, distance) %>%
+        select(origin, dest, passengers, op_carrier,
+               itin_yield, distance, year, quarter) %>%
         graph_from_data_frame(directed = FALSE, vertices = nodes) %>%
         get.data.frame() %>%
-        group_by(from, to, op_carrier) %>%
+        group_by(from, to, op_carrier, year, quarter) %>%
         mutate(itin_fare = itin_yield*distance) %>%
         summarise(weight = sum(passengers), fare_sd = round(sd(itin_fare), 2),
                   itin_fare = round(mean(itin_fare), 2),
                   itin_yield = mean(itin_yield), distance = mean(distance)) %>%
-        mutate(fare_sd = ifelse(is.na(fare_sd), 0, fare_sd))
-  }
-  else{
+        mutate(fare_sd = ifelse(is.na(fare_sd), 0, fare_sd)) %>%
+        select(-year, -quarter, everything())
+
+  }else{
 
    netUnd_all <- x %>%
-    select(origin, dest, passengers, itin_yield, distance) %>%
-    group_by(origin, dest) %>%
+    select(origin, dest, passengers, itin_yield, distance, year, quarter) %>%
+    group_by(origin, dest, year, quarter) %>%
     mutate(itin_fare = itin_yield*distance) %>%
     summarise(weight = sum(passengers), fare_sd = round(sd(itin_fare), 2),
                itin_fare = round(mean(itin_fare), 2),
                itin_yield = mean(itin_yield), distance = mean(distance)) %>%
-    mutate(fare_sd = ifelse(is.na(fare_sd), 0, fare_sd))
+    mutate(fare_sd = ifelse(is.na(fare_sd), 0, fare_sd)) %>%
+     select(-year, -quarter, everything())
 
   }
 
@@ -84,26 +97,50 @@ make.netUnd <- function(x, disp = FALSE, cap = FALSE, merge = TRUE, alpha = 0.00
   #-------------------------------------------------
 
   if(metro == FALSE){
-    nodes <- nodeStats(x)
+    nodes <- node_stats(x)
   }else{  # Metro option
     nodes <- nodeStatsMetro(x)
   }
 
   if(merge == FALSE){
-    gUnd <- graph_from_data_frame(netUnd_all, directed = FALSE, vertices = nodes)
+    gUnd <- graph_from_data_frame(netUnd_all,
+                                  directed = FALSE, vertices = nodes)
   }
   if(merge == TRUE & carrier == TRUE){
-    gUnd <- graph_from_data_frame(netUnd_all, directed = FALSE, vertices = nodes)
+    gUnd <- graph_from_data_frame(netUnd_all,
+                                  directed = FALSE, vertices = nodes)
   }else{
 
-  gUnd <- graph_from_data_frame(netUnd_all, directed = TRUE, vertices = nodes)
-  gUnd <- as.undirected(gUnd, mode = "collapse", edge.attr.comb=list(weight = "sum", itin_fare = "mean", itin_yield = "mean", fare_sd = "mean", distance = "mean"))
+  gUnd <- graph_from_data_frame(netUnd_all,
+                                directed = FALSE, vertices = nodes)
+
+  # Merges edges and keeps year and quarter
+
+  netUnd_all <- as_data_frame(gUnd)
+  netUnd_all <- netUnd_all %>%
+    rename(origin = from, dest = to) %>%
+    group_by(origin, dest, year, quarter) %>%
+    summarise(weight = sum(weight), fare_sd = round(sd(itin_fare), 2),
+              itin_fare = round(mean(itin_fare), 2),
+              itin_yield = mean(itin_yield), distance = mean(distance)) %>%
+    mutate(fare_sd = ifelse(is.na(fare_sd), 0, fare_sd)) %>%
+    select(-year, -quarter, everything())
+
+  gUnd <- graph_from_data_frame(netUnd_all,
+                                directed = FALSE, vertices = nodes)
+
+#  gUnd <- as.undirected(gUnd, mode = "collapse",
+#                        edge.attr.comb=list(weight = "sum",
+#                                            itin_fare = "mean",
+#                                            itin_yield = "mean",
+#                                            fare_sd = "mean",
+#                                            distance = "mean"))
   }
     if(disp == TRUE){
 
     # Run disparity filter
     # Creates igraph object
-    gUnd_disp <- dispfilter(gUnd, alpha = alpha)
+    gUnd_disp <- disparity_filter(gUnd, alpha = alpha)
     netUnd_disp <- get.data.frame(gUnd_disp)
 
     # Rename fields
@@ -140,19 +177,25 @@ make.netUnd <- function(x, disp = FALSE, cap = FALSE, merge = TRUE, alpha = 0.00
     }
 
     nodes <- as.data.frame(get.vertex.attribute(gUnd_disp))
+    nodes <- rename(nodes, airport = name)
 
-    return(list(gUnd_disp = gUnd_disp, netUnd_disp = netUnd_disp, nodes = nodes))
+    netlist <- list(gUnd_disp = gUnd_disp,
+                    netUnd_disp = netUnd_disp, nodes = nodes)
+    class(netlist) <- "skynet"
+    return(netlist)
 
-    # ----------------------------------------------------------------------------- #
-                           # End of dispfilter command #
-    # ----------------------------------------------------------------------------- #
+    # --------------------------------------------------------------- #
+                           # End of disparity_filter command #
+    # --------------------------------------------------------------- #
 
 
   }else if(cap == TRUE){
 
     #Run 10% cap
     gUnd_cap <- gUnd
-    gUnd_cap <- subgraph.edges(gUnd_cap, which(E(gUnd_cap)$weight > quantile(E(gUnd_cap)$weight, prob = 1-pct/100)), delete.vertices = TRUE)
+    gUnd_cap <- subgraph.edges(gUnd_cap,
+                    which(E(gUnd_cap)$weight > quantile(E(gUnd_cap)$weight,
+                    prob = 1-pct/100)), delete.vertices = TRUE)
 
     # Create datafram based on collapsed edges graph
     netUnd_cap <- igraph::as_data_frame(gUnd_cap)
@@ -189,12 +232,17 @@ make.netUnd <- function(x, disp = FALSE, cap = FALSE, merge = TRUE, alpha = 0.00
     }
 
     nodes <- as.data.frame(get.vertex.attribute(gUnd_cap))
+    nodes <- rename(nodes, airport = name)
 
-    return(list(gUnd_cap = gUnd_cap, netUnd_cap = netUnd_cap, nodes = nodes))
+    netlist <- list(gUnd_cap = gUnd_cap,
+                    netUnd_cap = netUnd_cap, nodes = nodes)
+    class(netlist) <- "skynet"
+    return(netlist)
 
-    # ----------------------------------------------------------------------------- #
+
+    # --------------------------------------------------------------- #
     # End of 10% filter command #
-    # ----------------------------------------------------------------------------- #
+    # --------------------------------------------------------------- #
 
   }else{
 
@@ -233,15 +281,21 @@ make.netUnd <- function(x, disp = FALSE, cap = FALSE, merge = TRUE, alpha = 0.00
 
     }
 
-    return(list(gUnd = gUnd, netUnd = netUnd_all, nodes = nodes))
+    netlist <- list(gUnd = gUnd, netUnd = netUnd_all, nodes = nodes)
+    class(netlist) <- "skynet"
+    return(netlist)
 
 
   }
 }
 
+make.netUnd <- function(...){
+  warning(paste("make.netUnd is deprecated, use make_net_und(), instead."))
+  do.call(make_net_und, list(...))
+}
 
-# ----------------------------------------------------------------------------- #
-# ----------------------------------------------------------------------------- #
-                            # End of netUnd command #
-# ----------------------------------------------------------------------------- #
-# ----------------------------------------------------------------------------- #
+# --------------------------------------------------------------- #
+# --------------------------------------------------------------- #
+                     # End of netUnd command #
+# --------------------------------------------------------------- #
+# --------------------------------------------------------------- #
