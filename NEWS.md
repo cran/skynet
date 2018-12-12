@@ -79,3 +79,15 @@
 
 * Year and quarter added to skynet object
 * Fixed site
+
+# skynet 1.2.2
+
+* Removed convert_raw as it is easier to import using the zip = TRUE argument and select the format to be saved to.
+
+# skynet 1.2.3
+
+* Now it is possible to import directly files from the BTS website with the download_db1b() function.
+
+# skynet 1.3
+
+* We have fixed some bugs and added the download_t100 function, making it finally possible to import both T100 and DB1B datasets without having to navigate to the BTS website.

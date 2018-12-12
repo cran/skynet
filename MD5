@@ -1,8 +1,8 @@
-01fca90c3bf0af9464ae1e5e12c63849 *DESCRIPTION
+23671c89e9f1bee9cc415354b69124c8 *DESCRIPTION
 d81cec317a7bdac3f1c35dd43fea55e5 *LICENSE
-a4f41a893990633ccf7588fb1e432a7e *NAMESPACE
-c2118413292cff268cd4c7b38685ff25 *NEWS.md
-083fb8e60ac731871e331f73a8363ead *R/PowerLaw.R
+0200681fea1f8260c5e9233cc1830fdb *NAMESPACE
+24bf5f4f0c1fb1cfcb690cce00b2c7ef *NEWS.md
+b98c3df0d1c1856cf696cc16a8902e87 *R/PowerLaw.R
 23e03e6a72c21b0e1023469247c8f7c8 *R/bootnet.R
 b78f05f7bca69d4cfa3a6c02a7071115 *R/createNodes.R
 a8d301e813e43b0ad72977a425871653 *R/data_ODsample.R
@@ -10,6 +10,8 @@ d1a8bf8b4771c530d8469b1f821f692d *R/data_airports.R
 2d98070f7f66c8039aaed8d17005a262 *R/data_carriers.R
 4161742435f9aad46989c2d1c93e36e4 *R/data_metro.R
 2985e4991d7c8eb6a5466b297c431427 *R/disparityfilter.R
+7d8dd438621026fb87af606ee7962abf *R/download_db1b.R
+7f29eeac27f28b09e3981487b78e32d2 *R/download_t100.R
 20cd84e510b97aa9b932e1b4fb86fe3a *R/findAirport.R
 a65ef8281ac0c89ed8c3ab748b60cfa7 *R/findCarrier.R
 1628280d30aa0c0f5770977076f88e5c *R/fromto.R
@@ -21,12 +23,12 @@ a65ef8281ac0c89ed8c3ab748b60cfa7 *R/findCarrier.R
 ab38c7d5080a78a91bdc2a735215ff5a *R/netPath.R
 ffcc6a4c915abb93226f7538724d7d0f *R/netUnd.R
 2443dcf7ea47bb725ecb63a1502e60da *R/nodeStats.R
-edb0ca4190b990dc0d80d291d6614ea6 *R/plotMap.R
-1a45b28c4e380f60d83bec90b460db65 *R/skynet.R
+c06cd344817db2c5569710341898d1e3 *R/plotMap.R
+9ee9d0322be533b94adf5e7da33f55bd *R/skynet.R
 5d87bc2c0afb971251f2a00abaebc220 *R/skynet_example.R
 ed2561271fc70010af79d2707b6d1dca *R/summary.R
-0c17609393f75a6fed4d458d684293e9 *README.md
-6ca9daa0133e04ea0dae7e20fc1a90d8 *build/vignette.rds
+f7b46cdb6af7acff56de4a8c5aacfc65 *README.md
+e8cf69b47a79d0233d517a56aa09503c *build/vignette.rds
 5a60f16586e700a3fce11ac3f41fe9ab *data/MetroFull.rda
 94b2961f3e9ffbd52953cfaff0a968b5 *data/MetroLookup.rda
 e8826bf8b827d394699e1b6ea867f4c8 *data/OD_Sample.rda
@@ -36,7 +38,7 @@ a11f50a8c4e31fde41c32f0693837249 *data/airportCodeFull.rda
 4b5e4002051246a5f8b654993cebfef3 *data/carriers.rda
 b69c5bcb781c923dc0f4f8038527578d *inst/doc/skynet.R
 9aed6c0f7c47322264c649f402e0705c *inst/doc/skynet.Rmd
-af65181a2c7653d91035922b848921e0 *inst/doc/skynet.html
+f937e77a4cb72acca0632515e64af5f3 *inst/doc/skynet.html
 28c4c183bc80337ee1b3f1aa89ea3cb6 *inst/extdata/Coupon_2001Q1.csv
 1198d6de41293a2a8a4c497138b47517 *inst/extdata/Origin_and_Destination_Survey_DB1BCoupon_2001_1.csv
 c8e78f21e9a571fe1dd00d3c2bc96f24 *inst/extdata/Origin_and_Destination_Survey_DB1BTicket_2001_1.csv
@@ -53,6 +55,8 @@ eb94bd38fbd2faafce1b31de72200bc7 *man/airportCode.Rd
 19fcd818db881b25a1dc87f830420767 *man/carriers.Rd
 622230fcbb4033d33ca8b6c0b6812a15 *man/createNodes.Rd
 9c9cc65804bcc3d844bb8acaf81b492d *man/disparity_filter.Rd
+a2149b0ce5890b75039efb3fb6cea5fa *man/download_db1b.Rd
+1f6b429834512622aba14aa9a3bc53d0 *man/download_t100.Rd
 3a146aa61e103430a6e2f882c23b657b *man/figures/logo.png
 73a5d382869d37983ab2004c3939cd6c *man/find_airport.Rd
 ce5589349ab944c4c43989eb04d3c7d9 *man/find_carrier.Rd
