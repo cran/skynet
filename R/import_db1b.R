@@ -120,13 +120,13 @@ globalVariables(c("ITIN_ID", "MKT_ID", "SEQ_NUM", "YEAR", "QUARTER",
                   "TRIP_BREAK", "OPERATING_CARRIER", "DISTANCE",
                   "GATEWAY", "ROUNDTRIP", "ITIN_YIELD",
                   "ITIN_FARE", "BULKFARE", "DISTANCE_FULL", "UNIQUE_CARRIER",
-                  "UNIQUE_CARRIER_NAME", "MONTH",
+                  "UNIQUE_CARRIER_NAME", "MONTH", "REPORTING_CARRIER",
                   "AIRCRAFT_CONFIG", "import_db1b", "CLASS", "auto",
                   "ItinID", "RoundTrip", "FarePerMile",
                   "Passengers", "ItinFare", "BulkFare",
                   "Distance", "MktID", "SeqNum", "OriginCityMarketID",
                   "Origin", "Year", "Quarter", "DestCityMarketID",
-                  "Dest", "Break", "OpCarrier", "Gateway"))
+                  "Dest", "Break", "OpCarrier", "Gateway", "RPCarrier"))
 
 
 pos <- 1

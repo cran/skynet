@@ -30,15 +30,21 @@ download_db1b <- function(y = NULL, q = NULL){
   couponpath <- paste(tempdir(), "/coupon.zip", sep = "")
   ticketpath <- paste(tempdir(), "/ticket.zip", sep = "")
 
-  download.file(couponname, couponpath)
-  download.file(ticketname, ticketpath)
+  oldw <- getOption("warn")
+  options(warn = -1)
+  tryCatch(download.file(couponname, couponpath),
+           error = function(e) print('Download failed. Please try again'))
+  tryCatch(download.file(ticketname, ticketpath),
+           error = function(e) print('Download failed. Please try again'))
+  options(warn = oldw)
+
 
   unzip(couponpath, paste("Origin_and_Destination_Survey_DB1BCoupon_",
                           y, "_", q, ".csv", sep = ""),
-        exdir = paste(tempdir(), "/", sep = ""))
+        exdir = tempdir())
   unzip(ticketpath, paste("Origin_and_Destination_Survey_DB1BTicket_",
                           y, "_", q, ".csv", sep = ""),
-       exdir = paste(tempdir(), "/", sep = ""))
+       exdir = tempdir())
 
   couponpath <- paste(tempdir(),"/Origin_and_Destination_Survey_DB1BCoupon_",
                       y, "_", q, ".csv", sep = "")
