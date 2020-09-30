@@ -4,7 +4,7 @@
 #' for SKYNET's import function.
 #'
 #' Files can be found here \url{https://www.transtats.bts.gov/Tables.asp?DB_ID=111}.
-#' More information on variables to select and type of files to use can be found \href{https://github.com/FilipeamTeixeira/skynet}{here}
+#' More information on variables to select and type of files to use can be found \href{https://github.com/ropensci/skynet}{here}
 #'
 #' @param x T-100 csv
 #' @param nonsch Should equal TRUE to include non-scheduled flights
@@ -40,7 +40,7 @@ import_t100 <- function(x, nonsch = FALSE, auto = TRUE){
                seats = SEATS, aircraft_type = AIRCRAFT_TYPE) %>%
         mutate(itin_fare = NA, itin_yield = NA, roundtrip = NA,
                airtime_avg = round(airtime_avg/departures)) %>%
-        left_join(., aircraft_type) %>%
+        left_join(., skynet::aircraft_type) %>%
         select(-aircraft_type, aircraft_type = Description)
 
       }else{
