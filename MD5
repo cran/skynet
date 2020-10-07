@@ -1,4 +1,4 @@
-d6e2fd5b34b16735db222a1030b61c67 *DESCRIPTION
+dfb91309468d6813a5c934540230757b *DESCRIPTION
 d81cec317a7bdac3f1c35dd43fea55e5 *LICENSE
 2ee799d6f07dca8f0d472a07ed545745 *NAMESPACE
 4feff541cf95f292861e6ab57ab7f290 *NEWS.md
@@ -10,10 +10,10 @@ d1a8bf8b4771c530d8469b1f821f692d *R/data_airports.R
 8f9a8f07a9a5842bdd7abdcf7ee1478f *R/data_carriers.R
 4161742435f9aad46989c2d1c93e36e4 *R/data_metro.R
 2985e4991d7c8eb6a5466b297c431427 *R/disparityfilter.R
-b3b615b3ba1a243a8075cb15192c56f8 *R/download_db1b.R
-9383b433abc927704c07d6d54f756cdc *R/download_ontime.R
+f277fcefd377e3530ee119fad33e4e07 *R/download_db1b.R
+be96e1376a193c87a70ddbe9b0b4af5f *R/download_ontime.R
 690f53766523fddbce50416e970c3e3a *R/download_t100.R
-e514de2793161047f4098fb507ed6e8c *R/download_t100_int.R
+31d1ae2b59dd4d331804d2d392b5a5fe *R/download_t100_int.R
 20cd84e510b97aa9b932e1b4fb86fe3a *R/findAirport.R
 a65ef8281ac0c89ed8c3ab748b60cfa7 *R/findCarrier.R
 1628280d30aa0c0f5770977076f88e5c *R/fromto.R
@@ -43,7 +43,7 @@ a11f50a8c4e31fde41c32f0693837249 *data/airportCodeFull.rda
 4b5e4002051246a5f8b654993cebfef3 *data/carriers.rda
 9169dd29e3e909289c2e8d7d6517c6b8 *inst/doc/skynet.R
 9aed6c0f7c47322264c649f402e0705c *inst/doc/skynet.Rmd
-a3701235e30740f96a8abb7339d89647 *inst/doc/skynet.html
+0d80acd7ac2fae52143f3f3bf1c5d4fb *inst/doc/skynet.html
 28c4c183bc80337ee1b3f1aa89ea3cb6 *inst/extdata/Coupon_2001Q1.csv
 1aa082605980d94b0b047951c418fc77 *inst/extdata/Ontime_2011_1.csv
 1198d6de41293a2a8a4c497138b47517 *inst/extdata/Origin_and_Destination_Survey_DB1BCoupon_2001_1.csv
@@ -87,9 +87,9 @@ f2828abf0f0090c0d09f5ae9085109d1 *man/skynet-package.Rd
 6d00236c9cc113431f5e4a706427c33a *man/skynet_example.Rd
 e5150f61b6976e0e6c9cdfe79cbb0acb *man/summary.skynet.Rd
 4c02314bed90b6a81de991f3c46bfd8c *tests/testthat.R
-fbe794fbd88011d3831256edc849946d *tests/testthat/test_download_db1b.R
-26b8e104c930c7377e4a32328060be5c *tests/testthat/test_download_ontime.R
-52578c67c70d95c0b960db22d48ebe78 *tests/testthat/test_download_t100.R
+c4cf702cd4b979b5cd65c5e708a9700f *tests/testthat/test_download_db1b.R
+b5fce45b35e44dc7af52791ec1557363 *tests/testthat/test_download_ontime.R
+382511e3ee1aef3fad6761a600c8908e *tests/testthat/test_download_t100.R
 d2b30233b5574b45f600628f60c7dd0d *tests/testthat/test_import_db1b.R
 c6d419e91a7d2d5d3399207274a58710 *tests/testthat/test_import_ontime.R
 04a5a499aefa22f1541eab1d878c3b19 *tests/testthat/test_import_t100.R
