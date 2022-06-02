@@ -108,3 +108,11 @@
 
 * Fixed links
 * Added download failed message
+
+# skynet 1.4.1
+
+* Fixed issue where download_t100 requires query to be encoded.
+
+# skynet 1.4.2
+
+* Skips test for download_t100 as BTS is transitioning to new download methodology.
