@@ -1,6 +1,6 @@
 Type: Package
 Package: skynet
-Version: 1.4.2
+Version: 1.4.3
 Title: Generates Networks from BTS Data
 Authors@R: person("Filipe", "Teixeira", email = "Filipe.MarquesTeixeira@Ugent.be", role = c("aut", "cre"))
 Maintainer: Filipe Teixeira <Filipe.MarquesTeixeira@Ugent.be>
@@ -28,7 +28,7 @@ Imports: data.table, igraph, dplyr, ggplot2, ggrepel, stringr, maps,
 Suggests: knitr, rmarkdown, testthat, kableExtra, covr
 VignetteBuilder: knitr
 NeedsCompilation: no
-Packaged: 2022-06-02 06:15:33 UTC; Fil
+Packaged: 2022-06-17 11:50:34 UTC; Fil
 Author: Filipe Teixeira [aut, cre]
 Repository: CRAN
-Date/Publication: 2022-06-02 12:30:02 UTC
+Date/Publication: 2022-06-17 13:00:02 UTC

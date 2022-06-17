@@ -1,7 +1,7 @@
-bd7f08d75bbb58f4072e5f3a495068bb *DESCRIPTION
+45c6c91cf9c31349a18014427f071c32 *DESCRIPTION
 d81cec317a7bdac3f1c35dd43fea55e5 *LICENSE
-edaa04e8d5e5a0c2d61a981099ee64f7 *NAMESPACE
-80c16f98d06acd7ff3f6dc04a3d2b300 *NEWS.md
+9c3c82bc5c17028d6d57e54c45c91e78 *NAMESPACE
+360bfd0514a9a35bd9d6cbe4a3ab6a32 *NEWS.md
 b98c3df0d1c1856cf696cc16a8902e87 *R/PowerLaw.R
 46a80b78b8a55b1220f1e5f720f6fae5 *R/bootnet.R
 b78f05f7bca69d4cfa3a6c02a7071115 *R/createNodes.R
@@ -10,9 +10,9 @@ d1a8bf8b4771c530d8469b1f821f692d *R/data_airports.R
 8f9a8f07a9a5842bdd7abdcf7ee1478f *R/data_carriers.R
 4161742435f9aad46989c2d1c93e36e4 *R/data_metro.R
 2985e4991d7c8eb6a5466b297c431427 *R/disparityfilter.R
-03a5f0a7f12ed79350a6e1046911165b *R/download_db1b.R
+f5868c1ad9c1de653fdca26175c293f2 *R/download_db1b.R
 be96e1376a193c87a70ddbe9b0b4af5f *R/download_ontime.R
-cfb1872b821ebc57d730d4e69d2f0169 *R/download_t100.R
+37d7a32d153c8955115e64d3e39210ba *R/download_t100.R
 860820fc4f3b9965f394cbf32f70ef7d *R/download_t100_int.R
 20cd84e510b97aa9b932e1b4fb86fe3a *R/findAirport.R
 ff69e4693069ac58c5bfbdd8714ac1a0 *R/findCarrier.R
@@ -28,10 +28,10 @@ a4913e8a5c012e37e0e81399a07a2a61 *R/make_net_trip.R
 ffcc6a4c915abb93226f7538724d7d0f *R/netUnd.R
 2443dcf7ea47bb725ecb63a1502e60da *R/nodeStats.R
 c06cd344817db2c5569710341898d1e3 *R/plotMap.R
-488e229b8b1e13e8c5cb2ff54b570759 *R/skynet.R
+e69b5ec90110bef06d2aa96956bed939 *R/skynet.R
 5d87bc2c0afb971251f2a00abaebc220 *R/skynet_example.R
 ed2561271fc70010af79d2707b6d1dca *R/summary.R
-68feb317f24c15c0c1b97877703652fd *README.md
+4eeb52be66db476554afb6ec8505bf22 *README.md
 cfb253d74de0730a328236cddbd20c4e *build/vignette.rds
 5a60f16586e700a3fce11ac3f41fe9ab *data/MetroFull.rda
 94b2961f3e9ffbd52953cfaff0a968b5 *data/MetroLookup.rda
@@ -43,7 +43,7 @@ a11f50a8c4e31fde41c32f0693837249 *data/airportCodeFull.rda
 4b5e4002051246a5f8b654993cebfef3 *data/carriers.rda
 9169dd29e3e909289c2e8d7d6517c6b8 *inst/doc/skynet.R
 9aed6c0f7c47322264c649f402e0705c *inst/doc/skynet.Rmd
-a51b434215fe68c25e51768dac20061f *inst/doc/skynet.html
+b102b1f04b14c38368962058ae62531c *inst/doc/skynet.html
 28c4c183bc80337ee1b3f1aa89ea3cb6 *inst/extdata/Coupon_2001Q1.csv
 1aa082605980d94b0b047951c418fc77 *inst/extdata/Ontime_2011_1.csv
 1198d6de41293a2a8a4c497138b47517 *inst/extdata/Origin_and_Destination_Survey_DB1BCoupon_2001_1.csv

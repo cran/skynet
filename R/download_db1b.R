@@ -42,6 +42,7 @@ download_db1b <- function(y = NULL, q = NULL){
   if(httr::http_error(couponname)){
     message("No internet connection or data source broken")
   }else{
+    options(timeout = 800)
 
   download.file(couponname, couponpath)
   download.file(ticketname, ticketpath)
@@ -65,8 +66,8 @@ download_db1b <- function(y = NULL, q = NULL){
 
 globalVariables(c("download.file", "unzip"))
 
+options(timeout = max(800, getOption("timeout"))) #Set larger timeout
+
 
 pos <- 1
 envir <- as.environment(pos)
-
-options(timeout = max(800, getOption("timeout"))) #Set larger timeout
